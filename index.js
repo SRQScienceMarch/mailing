@@ -22,13 +22,13 @@ app.use(morgan('dev'));
 //set the public folder to server public assets
 app.use(express.static(__dirname + '/public'));
 
-app.get('*', function(req, res){
+app.get('/', function(req, res){
   res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
 var adminRouter = express.Router();
 
-adminRouter.get('/authenticate', function(req, res){
+adminRouter.post('/authenticate', function(req, res){
   Admin.findOne({
     username: req.body.username
   }).select('username password').exec(function(err, user){
@@ -85,7 +85,7 @@ adminRouter.use(function(req, res, next){
     });
   }else{
     return res.status(403).send({
-      success: true,
+      success: false,
       message: 'No token provided'
     });
   }
